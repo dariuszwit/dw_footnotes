@@ -103,7 +103,10 @@ class MCI_Footnotes_Layout_Settings extends MCI_Footnotes_LayoutEngine {
 		$l_arr_Positions = array(
 			"footer" => __("in the footer", MCI_Footnotes_Config::C_STR_PLUGIN_NAME),
 			"post_end" => __("at the end of the post", MCI_Footnotes_Config::C_STR_PLUGIN_NAME),
-			"widget" => __("in the widget area", MCI_Footnotes_Config::C_STR_PLUGIN_NAME)
+			"widget" => __("in the widget area", MCI_Footnotes_Config::C_STR_PLUGIN_NAME),
+			//dw code modification:BEGIN
+			"dw_shortcode" => __("in the shortcode", MCI_Footnotes_Config::C_STR_PLUGIN_NAME)
+			//dw code modification:END
 		);
 
 		// load template file

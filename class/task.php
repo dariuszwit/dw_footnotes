@@ -187,7 +187,13 @@ class MCI_Footnotes_Task {
 	 */
 	public function the_content($p_str_Content) {
 		// appends the reference container if set to "post_end"
+		//dw code modification:BEGIN
+		if(MCI_Footnotes_Settings::instance()->get(MCI_Footnotes_Settings::C_STR_REFERENCE_CONTAINER_POSITION) == "dw_shortcode"){
+			return $this->exec($p_str_Content, MCI_Footnotes_Settings::instance()->get(MCI_Footnotes_Settings::C_STR_REFERENCE_CONTAINER_POSITION) == "dw_shortcode" ? true : false);
+		}
+
 		return $this->exec($p_str_Content, MCI_Footnotes_Settings::instance()->get(MCI_Footnotes_Settings::C_STR_REFERENCE_CONTAINER_POSITION) == "post_end" ? true : false);
+		//dw code modification:END
 	}
 
 	/**
@@ -224,8 +230,13 @@ class MCI_Footnotes_Task {
 	 * @return string Content with replaced footnotes.
 	 */
 	public function widget_text($p_str_Content) {
+		//dw code modification:BEGIN
+		if(MCI_Footnotes_Settings::instance()->get(MCI_Footnotes_Settings::C_STR_REFERENCE_CONTAINER_POSITION) == "dw_shortcode"){
+			return $this->exec($p_str_Content, MCI_Footnotes_Settings::instance()->get(MCI_Footnotes_Settings::C_STR_REFERENCE_CONTAINER_POSITION) == "dw_shortcode" ? true : false);
+		}
 		// appends the reference container if set to "post_end"
 		return $this->exec($p_str_Content, MCI_Footnotes_Settings::instance()->get(MCI_Footnotes_Settings::C_STR_REFERENCE_CONTAINER_POSITION) == "post_end" ? true : false);
+		//dw code modification:END
 	}
 
     /**
@@ -279,10 +290,19 @@ class MCI_Footnotes_Task {
 		// replace all footnotes in the content, settings are NOT converted to html characters
 		$p_str_Content = $this->search($p_str_Content, false, $p_bool_HideFootnotesText);
 
+		//dw code modification:BEGIN
+		$dw_references = $this->ReferenceContainer();
 		// append the reference container
 		if ($p_bool_OutputReferences) {
-			$p_str_Content = $p_str_Content . $this->ReferenceContainer();
+			//if MCI_Footnotes_Config::C_STR_PLUGIN_NAME dw_shortcode
+			if(MCI_Footnotes_Settings::instance()->get(MCI_Footnotes_Settings::C_STR_REFERENCE_CONTAINER_POSITION) == "dw_shortcode"){
+				// find and replace footnotes shortcode [footnotesshortcode] if chosen
+				$p_str_Content = str_replace( '[footnotesshortcode]', $dw_references, $p_str_Content );
+			}else{
+				$p_str_Content = $p_str_Content . $dw_references;
+			}
 		}
+		//dw code modification:END
 
 		// take a look if the LOVE ME slug should NOT be displayed on this page/post, remove the short code if found
 		if (strpos($p_str_Content, MCI_Footnotes_Config::C_STR_NO_LOVE_SLUG) !== false) {
